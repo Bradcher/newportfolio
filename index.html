@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brad Cher — Websites & Dashboards for Local Businesses</title>
+  <meta name="description" content="I build modern, mobile-friendly websites and custom dashboards that help local businesses grow their brand and reach new clients online." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #08080d;
+      --bg-2: #0e0e16;
+      --bg-card: #13131d;
+      --bg-card-h: #191926;
+      --text: #ededf4;
+      --text-2: #8e8ea3;
+      --text-3: #5c5c72;
+      --accent: #6958f5;
+      --accent-l: #8478ff;
+      --accent-glow: rgba(105,88,245,0.12);
+      --green: #2dd4a0;
+      --green-glow: rgba(45,212,160,0.10);
+      --amber: #f5a623;
+      --border: rgba(255,255,255,0.06);
+      --border-h: rgba(255,255,255,0.12);
+      --r: 14px;
+      --r-lg: 22px;
+      --font: 'DM Sans', -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(8,8,13,0.75);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: var(--mono); font-weight: 700; font-size: 0.95rem;
+      letter-spacing: -0.3px;
+    }
+    .nav-brand em { font-style: normal; color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.85rem; font-weight: 500; color: var(--text-2);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.65rem 1.5rem; border-radius: 10px;
+      font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer;
+      transition: all 0.25s ease; text-decoration: none;
+    }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-l); transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border-h); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent-l); }
+    .btn-sm { padding: 0.5rem 1.1rem; font-size: 0.82rem; border-radius: 8px; }
+
+    /* mobile nav */
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; flex-direction: column; gap: 5px; }
+    .hamburger span { width: 22px; height: 2px; background: var(--text); display: block; transition: 0.3s; }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none; position: absolute; top: 100%; right: 0;
+        background: var(--bg-2); border: 1px solid var(--border);
+        border-radius: 0 0 var(--r) var(--r);
+        flex-direction: column; padding: 1.5rem 2rem; gap: 1.2rem; width: 220px;
+      }
+      .nav-links.open { display: flex; }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 5.5rem 1.5rem; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    .label {
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.14em;
+      margin-bottom: 0.6rem;
+    }
+    .heading {
+      font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700;
+      line-height: 1.18; letter-spacing: -0.025em; margin-bottom: 0.75rem;
+    }
+    .subtext { color: var(--text-2); font-size: 1.05rem; max-width: 540px; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; padding-top: 5rem;
+      position: relative;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -180px; right: -160px;
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 220px;
+      gap: 3rem; align-items: center; width: 100%;
+    }
+    .hero-hi {
+      font-size: 1rem; font-weight: 500; color: var(--accent);
+      font-family: var(--mono); margin-bottom: 1rem; letter-spacing: 0.03em;
+    }
+    .hero-h1 {
+      font-size: clamp(2rem, 4.8vw, 3.2rem); font-weight: 700;
+      line-height: 1.14; letter-spacing: -0.02em; margin-bottom: 1.2rem;
+    }
+    .hero-h1 strong {
+      background: linear-gradient(135deg, var(--accent), var(--accent-l));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub { color: var(--text-2); font-size: 1.08rem; max-width: 510px; margin-bottom: 2rem; }
+    .hero-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .avatar {
+      width: 200px; height: 200px; border-radius: 50%; overflow: hidden;
+      border: 3px solid var(--border-h); flex-shrink: 0;
+      box-shadow: 0 0 60px var(--accent-glow);
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .avatar { width: 150px; height: 150px; margin: 0 auto; order: -1; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-btns { justify-content: center; }
+    }
+
+    /* ── PROJECTS ── */
+    .projects-sec { background: var(--bg-2); }
+    .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .proj-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); overflow: hidden; transition: all 0.3s;
+    }
+    .proj-card:hover {
+      border-color: var(--border-h); transform: translateY(-5px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    }
+    .proj-card img {
+      width: 100%; aspect-ratio: 16/9; object-fit: contain;
+      border-bottom: 1px solid var(--border);
+      background: #eaeaed;
+      padding: 1rem 0.5rem;
+    }
+    .proj-body { padding: 1.4rem; }
+    .proj-body h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .proj-body p { color: var(--text-2); font-size: 0.88rem; line-height: 1.55; margin-bottom: 1rem; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+    .tag {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+      color: var(--accent); background: var(--accent-glow);
+      padding: 0.2rem 0.6rem; border-radius: 6px;
+    }
+    .proj-link {
+      font-size: 0.84rem; font-weight: 600; color: var(--text-2); transition: color 0.2s;
+    }
+    .proj-card:hover .proj-link { color: var(--accent-l); }
+    .proj-link svg { vertical-align: -2px; margin-left: 4px; transition: transform 0.2s; }
+    .proj-card:hover .proj-link svg { transform: translateX(3px); }
+    @media (max-width: 700px) { .proj-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; } }
+
+    /* ── CASE STUDY ── */
+    .cs-sec { position: relative; }
+    .cs-sec::before {
+      content: ''; position: absolute; top: 50%; left: -200px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+      pointer-events: none; transform: translateY(-50%);
+    }
+    .cs-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--green-glow); color: var(--green);
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+      padding: 0.35rem 0.9rem; border-radius: 40px;
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .cs-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+    .cs-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
+
+    /* left: narrative */
+    .cs-story { display: flex; flex-direction: column; gap: 2rem; }
+    .cs-block {}
+    .cs-block-head {
+      display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.5rem;
+    }
+    .cs-num {
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 0.8rem; font-weight: 700;
+      background: var(--accent-glow); color: var(--accent); border-radius: 9px; flex-shrink: 0;
+    }
+    .cs-block-head h3 { font-size: 1.1rem; font-weight: 600; }
+    .cs-block p { color: var(--text-2); font-size: 0.92rem; padding-left: calc(30px + 0.65rem); }
+
+    /* right: metrics + visual */
+    .cs-right {}
+    .cs-metrics {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .metric {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .metric:hover { border-color: var(--border-h); }
+    .metric-val {
+      font-size: 1.8rem; font-weight: 700; letter-spacing: -0.03em;
+      margin-bottom: 0.2rem;
+    }
+    .metric-val.green { color: var(--green); }
+    .metric-val.accent { color: var(--accent-l); }
+    .metric-val.amber { color: var(--amber); }
+    .metric-label { font-size: 0.8rem; color: var(--text-3); font-weight: 500; }
+
+    .cs-visual {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 1.5rem; position: relative; overflow: hidden;
+    }
+    .cs-visual-head {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+    }
+    .cs-visual-head h4 { font-size: 0.9rem; font-weight: 600; }
+    .cs-visual-tag {
+      font-family: var(--mono); font-size: 0.65rem; color: var(--green);
+      background: var(--green-glow); padding: 0.2rem 0.55rem; border-radius: 5px;
+    }
+    /* mini bar chart mockup */
+    .mini-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; }
+    .bar {
+      flex: 1; border-radius: 4px 4px 0 0; transition: height 0.6s ease;
+      position: relative;
+    }
+    .bar-old { background: var(--border-h); }
+    .bar-new { background: linear-gradient(180deg, var(--green) 0%, rgba(45,212,160,0.4) 100%); }
+    .chart-legend {
+      display: flex; gap: 1.2rem; margin-top: 0.8rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text-3); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 3px; }
+    .legend-dot.old { background: var(--border-h); }
+    .legend-dot.new { background: var(--green); }
+
+    @media (max-width: 768px) {
+      .cs-layout { grid-template-columns: 1fr; }
+      .cs-metrics { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── PRICING ── */
+    .pricing-sec { position: relative; }
+    .pricing-sec::before {
+      content: ''; position: absolute; top: -100px; right: -180px;
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+    .price-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 2rem 1.5rem;
+      display: flex; flex-direction: column; transition: all 0.3s; position: relative;
+    }
+    .price-card:hover { border-color: var(--border-h); transform: translateY(-4px); }
+    .price-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 0 40px var(--accent-glow), inset 0 1px 0 rgba(105,88,245,0.2);
+    }
+    .price-card.featured::before {
+      content: 'Most Popular';
+      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+      color: #fff; background: var(--accent); padding: 0.2rem 0.8rem;
+      border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .price-tier {
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .price-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .price-card .price-desc { font-size: 0.85rem; color: var(--text-3); margin-bottom: 1.5rem; line-height: 1.5; }
+    .price-row {
+      display: flex; align-items: baseline; gap: 0.3rem; margin-bottom: 0.15rem;
+    }
+    .price-amount {
+      font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;
+    }
+    .price-period { font-size: 0.85rem; color: var(--text-3); }
+    .price-setup { font-size: 0.8rem; color: var(--text-2); margin-bottom: 1.5rem; }
+    .price-features { list-style: none; margin-bottom: 2rem; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; }
+    .price-features li {
+      font-size: 0.85rem; color: var(--text-2); display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .price-features li::before {
+      content: '✓'; color: var(--green); font-weight: 700; font-size: 0.8rem; flex-shrink: 0; margin-top: 1px;
+    }
+    .price-card .btn { width: 100%; justify-content: center; }
+
+    @media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; } }
+
+    /* ── PROCESS ── */
+    .process-sec { background: var(--bg-2); }
+    .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .step-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 2rem 1.5rem; text-align: center;
+      transition: all 0.3s; position: relative;
+    }
+    .step-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+    .step-icon {
+      width: 52px; height: 52px; margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent-glow); border-radius: 14px; font-size: 1.4rem;
+    }
+    .step-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step-card p { color: var(--text-2); font-size: 0.88rem; }
+    .step-num-badge {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+      color: var(--accent); background: var(--bg-2); border: 1px solid var(--border);
+      padding: 0.15rem 0.6rem; border-radius: 20px; letter-spacing: 0.08em;
+    }
+    @media (max-width: 768px) { .process-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; } }
+
+    /* ── CTA ── */
+    .cta-sec {
+      text-align: center;
+      position: relative;
+    }
+    .cta-sec::before {
+      content: ''; position: absolute; bottom: -120px; right: -120px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 3.5rem 2.5rem;
+      max-width: 680px; margin: 0 auto;
+      position: relative;
+    }
+    .cta-box h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 700; margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+    .cta-box > p { color: var(--text-2); font-size: 1rem; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+    /* contact form */
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+      text-align: left; margin-top: 2rem;
+    }
+    .contact-info { display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; }
+    .contact-item { display: flex; align-items: center; gap: 0.75rem; }
+    .contact-icon {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      background: var(--accent-glow); border-radius: 10px; flex-shrink: 0;
+    }
+    .contact-icon svg { color: var(--accent); }
+    .contact-item-text a { color: var(--text); font-size: 0.92rem; font-weight: 500; transition: color 0.2s; }
+    .contact-item-text a:hover { color: var(--accent-l); }
+    .contact-item-text span { display: block; font-size: 0.75rem; color: var(--text-3); margin-top: 0.1rem; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 0.85rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    .contact-form input,
+    .contact-form textarea {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.8rem 1rem;
+      color: var(--text); font-family: var(--font); font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+      width: 100%;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--text-3); }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--accent); }
+    .contact-form textarea { resize: vertical; min-height: 100px; }
+    .contact-form .btn { width: 100%; justify-content: center; margin-top: 0.25rem; }
+    .form-success {
+      display: none; text-align: center; padding: 2rem;
+      color: var(--green); font-weight: 600;
+    }
+    .form-success.show { display: block; }
+    .form-success p { color: var(--text-2); font-weight: 400; margin-top: 0.4rem; font-size: 0.9rem; }
+
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .cta-box { padding: 2.5rem 1.5rem; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem; color: var(--text-3);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+    .anim-d1 { animation-delay: 0.1s; }
+    .anim-d2 { animation-delay: 0.2s; }
+    .anim-d3 { animation-delay: 0.3s; }
+    .anim-d4 { animation-delay: 0.4s; }
+
+    /* reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ════════ NAV ════════ -->
+<nav class="nav">
+  <a href="#home" class="nav-brand">brad<em>cher</em></a>
+  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links">
+    <a href="#projects">Work</a>
+    <a href="#case-study">Case Study</a>
+    <a href="#process">Process</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact" class="btn btn-accent btn-sm">Let's Talk</a>
+  </div>
+</nav>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero" id="home">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="hero-hi anim">Hi, I'm Brad &#x1F44B;</p>
+        <h1 class="hero-h1 anim anim-d1">I build modern, mobile-friendly websites that <strong>help local businesses grow their brand and reach new clients online.</strong></h1>
+        <p class="hero-sub anim anim-d2">Full-stack web developer specializing in HTML, CSS, JS, and backend tools to create custom websites and dashboards.</p>
+        <div class="hero-btns anim anim-d3">
+          <a href="#projects" class="btn btn-accent">View My Work</a>
+          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+        </div>
+      </div>
+      <div class="avatar anim anim-d2">
+        <img src="https://bradcher.github.io/portfolio/img/bc.png" alt="Brad Cher" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PROJECTS ════════ -->
+<section class="projects-sec" id="projects">
+  <div class="wrap">
+    <p class="label">Selected Work</p>
+    <h2 class="heading">Projects</h2>
+    <p class="subtext">Websites I've built for real local businesses — designed to convert visitors into customers.</p>
+    <div class="proj-grid">
+
+      <!-- DGOS -->
+      <a href="https://dgosaz.com/" target="_blank" class="proj-card reveal">
+        <img src="./img/phonto_2.jpeg" alt="DGOS Outdoor Living" />
+        <div class="proj-body">
+          <h3>DGOS Outdoor Living</h3>
+          <div class="proj-tags"><span class="tag">Multi-page</span><span class="tag">Gallery</span><span class="tag">Services</span></div>
+          <p>Full website for an Arizona landscape construction and custom pool company — with service pages, project gallery, and contact flow.</p>
+          <span class="proj-link">View live site <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Yasma -->
+      <a href="https://www.theyasmascreen.com" target="_blank" class="proj-card reveal">
+        <img src="./img/phonto_1.jpeg" alt="The Yasma Screen" />
+        <div class="proj-body">
+          <h3>The Yasma Screen</h3>
+          <div class="proj-tags"><span class="tag">Responsive</span><span class="tag">Multi-page</span></div>
+          <p>Responsive three-page website for a Florida company specializing in pool cages, screenings, pergolas, and more.</p>
+          <span class="proj-link">View live site <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
+        </div>
+      </a>
+
+      <!-- Limitless Real Estate -->
+      <a href="https://bradenjohnsonrealtyazhomes.com/" target="_blank" class="proj-card reveal">
+        <img src="./img/phonto.jpeg" alt="Limitless Real Estate" />
+        <div class="proj-body">
+          <h3>Limitless Real Estate</h3>
+          <div class="proj-tags"><span class="tag">Lead Gen</span><span class="tag">Landing Page</span></div>
+          <p>Luxury real estate lead capture page with listing photo gallery, consultation booking form, and CRM integration.</p>
+          <span class="proj-link">View live site <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
+        </div>
+      </a>
+
+      <!-- E&G -->
+      <a href="https://engdetailing.com" target="_blank" class="proj-card reveal">
+        <img src="./img/phonto_3.jpeg" alt="E&G Auto Detailing" />
+        <div class="proj-body">
+          <h3>E&amp;G Auto Detailing</h3>
+          <div class="proj-tags"><span class="tag">Booking</span><span class="tag">Services</span></div>
+          <p>Mobile detailing site with clean service cards and dedicated pages for PPF, tint, and ceramic coating.</p>
+          <span class="proj-link">View live site <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CASE STUDY ════════ -->
+<section class="cs-sec" id="case-study">
+  <div class="wrap">
+    <div class="cs-badge">Case Study</div>
+    <p class="label">Rescue Me Pools — Custom Dashboard + AI Outreach</p>
+    <h2 class="heading">Turning 550 old leads into booked&nbsp;jobs</h2>
+    <p class="subtext">A custom-coded dashboard and automated outreach system that helped a Gilbert, AZ pool service company reactivate their entire dead lead list — and start booking jobs within days.</p>
+
+    <div class="cs-layout">
+      <!-- Left: narrative -->
+      <div class="cs-story reveal">
+        <div class="cs-block">
+          <div class="cs-block-head">
+            <span class="cs-num">1</span>
+            <h3>The Problem</h3>
+          </div>
+          <p>Rescue Me Pools had over 550 old contacts sitting untouched in their system. No follow-up, no pipeline visibility, no way to tell which leads were still interested. They were paying for marketing but letting past leads go to waste.</p>
+        </div>
+        <div class="cs-block">
+          <div class="cs-block-head">
+            <span class="cs-num">2</span>
+            <h3>The Solution</h3>
+          </div>
+          <p>I built a custom-coded dashboard with an AI-powered outreach system that automatically contacted all 550+ leads, staged them through different pipelines based on their responses, and gave the owner full control — including the ability to pause automation and jump in with manual texting when a lead was ready to close.</p>
+        </div>
+        <div class="cs-block">
+          <div class="cs-block-head">
+            <span class="cs-num">3</span>
+            <h3>The Result</h3>
+          </div>
+          <p>Within the first week, the system had booked over 10 jobs from leads that had been collecting dust. The owner could see every metric, every pipeline stage, and every conversation in one place — and knew exactly where to focus to close more work.</p>
+        </div>
+      </div>
+
+      <!-- Right: metrics + chart -->
+      <div class="cs-right reveal">
+        <div class="cs-metrics">
+          <div class="metric">
+            <div class="metric-val green">550+</div>
+            <div class="metric-label">Old leads contacted</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val accent">10+</div>
+            <div class="metric-label">Jobs booked in week one</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val amber">$0</div>
+            <div class="metric-label">Extra ad spend required</div>
+          </div>
+          <div class="metric">
+            <div class="metric-val green">&#x2713;</div>
+            <div class="metric-label">Fully automated outreach</div>
+          </div>
+        </div>
+
+        <!-- mini chart visual -->
+        <div class="cs-visual">
+          <div class="cs-visual-head">
+            <h4>Jobs Booked from Old Leads</h4>
+            <span class="cs-visual-tag">After launch</span>
+          </div>
+          <div class="mini-chart">
+            <div class="bar bar-old" style="height:5%"></div>
+            <div class="bar bar-old" style="height:5%"></div>
+            <div class="bar bar-old" style="height:8%"></div>
+            <div class="bar bar-old" style="height:5%"></div>
+            <div class="bar bar-old" style="height:5%"></div>
+            <div class="bar bar-new" style="height:45%"></div>
+            <div class="bar bar-new" style="height:70%"></div>
+            <div class="bar bar-new" style="height:85%"></div>
+            <div class="bar bar-new" style="height:78%"></div>
+            <div class="bar bar-new" style="height:92%"></div>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot old"></span> Before</span>
+            <span class="legend-item"><span class="legend-dot new"></span> After dashboard</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 2.5rem; text-align: center;" class="reveal">
+      <p style="color: var(--text-2); font-size: 0.95rem; max-width: 540px; margin: 0 auto 1.2rem;">
+        <strong style="color: var(--text);">Have old leads sitting in your system?</strong> A custom dashboard and automated outreach can turn them into revenue — without spending another dollar on ads.
+      </p>
+      <a href="#contact" class="btn btn-accent">Let's Build Yours</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PROCESS ════════ -->
+<section class="process-sec" id="process">
+  <div class="wrap">
+    <p class="label">How It Works</p>
+    <h2 class="heading">Simple process, serious results</h2>
+    <p class="subtext">From first conversation to a live site — here's how we work together.</p>
+
+    <div class="process-grid">
+      <div class="step-card reveal">
+        <span class="step-num-badge">01</span>
+        <div class="step-icon">&#128172;</div>
+        <h3>Discovery Call</h3>
+        <p>We talk about your business, your goals, and what you need your website or dashboard to do. No hard sell — just a real conversation.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num-badge">02</span>
+        <div class="step-icon">&#128187;</div>
+        <h3>Build &amp; Launch</h3>
+        <p>I design and develop your site with your input at every stage. Fast turnaround, mobile-first, and optimized for search engines.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num-badge">03</span>
+        <div class="step-icon">&#128200;</div>
+        <h3>Grow &amp; Support</h3>
+        <p>After launch, I keep your site updated, secure, and performing. Monthly support means your online presence keeps working for you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PRICING ════════ -->
+<section class="pricing-sec" id="pricing">
+  <div class="wrap">
+    <p class="label">Pricing</p>
+    <h2 class="heading">Invest in your online presence</h2>
+    <p class="subtext">Low upfront cost, ongoing support. Your website stays fast, secure, and working for you — every month.</p>
+
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="price-card reveal">
+        <span class="price-tier">Starter</span>
+        <h3>Landing Page</h3>
+        <p class="price-desc">A single high-converting page to capture leads and establish your brand online.</p>
+        <div class="price-row">
+          <span class="price-amount">$150</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="price-setup">Starting at $500 one-time setup</p>
+        <ul class="price-features">
+          <li>Custom one-page design</li>
+          <li>Mobile responsive</li>
+          <li>SEO fundamentals</li>
+          <li>Hosting &amp; SSL included</li>
+          <li>Monthly content updates</li>
+          <li>Performance monitoring</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost btn-sm">Get Started</a>
+      </div>
+
+      <!-- Standard -->
+      <div class="price-card featured reveal">
+        <span class="price-tier">Standard</span>
+        <h3>Business Website</h3>
+        <p class="price-desc">A full multi-page site built to showcase your services and convert visitors into customers.</p>
+        <div class="price-row">
+          <span class="price-amount">$200</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="price-setup">Starting at $1,000 one-time setup</p>
+        <ul class="price-features">
+          <li>Multi-page custom site (up to 5 pages)</li>
+          <li>Mobile responsive</li>
+          <li>SEO optimization</li>
+          <li>Hosting &amp; SSL included</li>
+          <li>Monthly updates &amp; edits</li>
+          <li>Analytics reporting</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#contact" class="btn btn-accent btn-sm">Get Started</a>
+      </div>
+
+      <!-- Growth -->
+      <div class="price-card reveal">
+        <span class="price-tier">Growth</span>
+        <h3>Website + Dashboard</h3>
+        <p class="price-desc">Everything in Standard, plus a custom CRM dashboard to track leads and automate follow-ups.</p>
+        <div class="price-row">
+          <span class="price-amount">$300</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <p class="price-setup">Starting at $1,500 one-time setup</p>
+        <ul class="price-features">
+          <li>Full multi-page website</li>
+          <li>Custom GHL dashboard</li>
+          <li>Lead tracking &amp; pipeline</li>
+          <li>Automated follow-up sequences</li>
+          <li>Monthly performance review</li>
+          <li>All Standard features included</li>
+          <li>Dedicated support</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost btn-sm">Get Started</a>
+      </div>
+    </div>
+
+    <p style="text-align: center; margin-top: 1.5rem; color: var(--text-3); font-size: 0.82rem;" class="reveal">
+      All plans include hosting, security updates, and ongoing support. No long-term contracts — cancel anytime.
+    </p>
+  </div>
+</section>
+
+<!-- ════════ CONTACT ════════ -->
+<section class="cta-sec" id="contact">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div style="text-align: center;">
+        <p class="label">Let's Work Together</p>
+        <h2>Ready to grow your business online?</h2>
+        <p>Whether you need a new website, a custom dashboard, or want to finally put those old leads to work — tell me about your project.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Left: info -->
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <a href="mailto:bradleycher@gmail.com">bradleycher@gmail.com</a>
+              <span>I'll respond within 24 hours</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.86 19.86 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.86 19.86 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <a href="tel:480-486-0933">(480) 486-0933</a>
+              <span>Call or text anytime</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <span style="color: var(--text); font-size: 0.92rem; font-weight: 500;">Arizona-based</span>
+              <span>Serving clients nationwide</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div id="contact-form-wrap">
+          <div class="contact-form" id="contactForm">
+            <div class="form-row">
+              <input type="text" id="cf-name" placeholder="Your name" required />
+              <input type="email" id="cf-email" placeholder="Email address" required />
+            </div>
+            <input type="text" id="cf-phone" placeholder="Phone (optional)" />
+            <textarea id="cf-message" placeholder="Tell me about your project..." rows="4" required></textarea>
+            <button class="btn btn-accent" type="button" onclick="submitForm()">Send Message</button>
+          </div>
+          <div class="form-success" id="formSuccess">
+            &#10003; Message sent!
+            <p>I'll get back to you within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  &copy; 2025 Brad Cher Web Dev. All rights reserved.
+</footer>
+
+<!-- ════════ SCROLL REVEAL ════════ -->
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+<!-- Form Handler (Formspree) -->
+<script>
+  function submitForm() {
+    const btn = document.querySelector('#contactForm .btn');
+    const name = document.getElementById('cf-name').value.trim();
+    const email = document.getElementById('cf-email').value.trim();
+    const phone = document.getElementById('cf-phone').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+
+    if (!name || !email || !message) {
+      btn.textContent = 'Please fill in required fields';
+      btn.style.background = '#e74c3c';
+      setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; }, 2500);
+      return;
+    }
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    fetch('https://formspree.io/f/mykbjlne', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, phone, message })
+    })
+    .then(res => {
+      if (res.ok) {
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('formSuccess').classList.add('show');
+      } else {
+        throw new Error('Form submission failed');
+      }
+    })
+    .catch(() => {
+      btn.textContent = 'Something went wrong — try again';
+      btn.style.background = '#e74c3c';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; }, 3000);
+    });
+  }
+</script>
+
+</body>
+</html>
